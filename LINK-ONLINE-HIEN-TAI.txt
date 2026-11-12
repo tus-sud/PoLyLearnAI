@@ -1,0 +1,10 @@
+============================================================
+LINK CỐ ĐỊNH VĨNH VIỄN (KHÔNG BAO GIỜ ĐỔI):
+https://tapered-attic-jot.ngrok-free.dev
+============================================================
+
+HƯỚNG DẪN:
+1. Gửi đường link https://tapered-attic-jot.ngrok-free.dev qua Zalo/Messenger để mở trên bất kỳ điện thoại nào (4G/5G/Wi-Fi khác mạng).
+2. Đường link này đã được khóa cố định vĩnh viễn theo tài khoản của bạn — tắt máy bật lại vẫn giữ nguyên đúng 1 link này!
+3. Khi nào khởi động lại máy tính, chỉ cần mở Terminal gõ:
+   .\chia-se-online.bat
