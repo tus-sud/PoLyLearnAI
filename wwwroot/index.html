@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>PolyLearn AI - Nền Tảng Học Đa Ngôn Ngữ Thông Minh</title>
+  <meta name="description" content="Học tiếng Anh, tiếng Trung, tiếng Nhật và tiếng Hàn với bài kiểm tra Trắc nghiệm & Tự luận AI, Kho từ vĩnh viễn và Trợ lý AI thông minh.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="css/style.css?v=20261112_1">
+</head>
+<body>
+
+  <!-- Left App Sidebar (desktop) -->
+  <aside class="app-sidebar" id="app-sidebar">
+    <a href="#" class="side-brand" data-view="dashboard" onclick="event.preventDefault(); document.getElementById('nav-btn-dashboard').click();">
+      <span class="side-brand-logo">🦉</span>
+      <span class="side-brand-text">Poly<span>Learn</span></span>
+    </a>
+
+    <div class="side-section-label">Không gian học</div>
+    <nav class="side-nav">
+      <button type="button" class="side-nav-item nav-btn" data-view="dashboard"><span class="side-ico">🏠</span><span>Trang chủ</span></button>
+      <button type="button" class="side-nav-item nav-btn active" data-view="lessons"><span class="side-ico">🗺️</span><span>Lộ trình &amp; Từ vựng</span><span class="side-badge" id="side-words-badge">0</span></button>
+      <button type="button" class="side-nav-item nav-btn" data-view="mistakes" id="side-nav-mistakes"><span class="side-ico">⚠️</span><span>Câu &amp; Từ đã sai</span><span class="side-badge" id="side-mistakes-badge" style="background: rgba(239,68,68,0.16); color: #ef4444;">0</span></button>
+      <button type="button" class="side-nav-item nav-btn" data-view="quizzes"><span class="side-ico">🎯</span><span>Kiểm tra</span></button>
+      <button type="button" class="side-nav-item nav-btn" data-view="ai"><span class="side-ico">🤖</span><span>AI Lab</span></button>
+      <button type="button" class="side-nav-item nav-btn" data-view="profile"><span class="side-ico">🎒</span><span>Hồ sơ</span></button>
+      <button type="button" class="side-nav-item nav-btn" data-view="admin" id="side-nav-admin" style="display: none;"><span class="side-ico">⚙️</span><span>Quản trị</span></button>
+    </nav>
+
+    <div class="side-streak-card">
+      <div class="side-streak-head">
+        <span>✦ Chuỗi ngày học</span>
+        <span class="side-streak-flame">🔥</span>
+      </div>
+      <div class="side-streak-count"><span id="side-streak-count">0</span> ngày</div>
+      <div class="side-week-row" id="side-week-row"></div>
+    </div>
+
+    <button type="button" class="side-user-card" id="side-user-card">
+      <span class="side-user-avatar" id="side-user-avatar">?</span>
+      <span class="side-user-meta">
+        <strong id="side-user-name">Khách</strong>
+        <small id="side-user-rank">Đăng nhập để lưu tiến độ</small>
+      </span>
+      <span class="side-user-chev">›</span>
+    </button>
+  </aside>
+
+  <!-- Modern App Top Bar -->
+  <header class="app-topbar">
+    <div class="app-topbar-inner">
+      <div class="app-topbar-left">
+        <select class="lang-select-pill" id="global-lang-select" title="Chọn ngôn ngữ học">
+          <option value="1">🇬🇧 Tiếng Anh</option>
+          <option value="2" selected>🇨🇳 Tiếng Trung</option>
+          <option value="3">🇯🇵 Tiếng Nhật</option>
+          <option value="4">🇰🇷 Tiếng Hàn</option>
+        </select>
+        <button type="button" class="app-icon-btn" id="btn-toggle-theme" title="Đổi giao diện Sáng / Tối">🌙</button>
+        <a href="#" class="logo-hidden-brand" id="brand-logo" style="display: none;">PolyLearn</a>
+      </div>
+
+      <div class="app-topbar-center">
+        <h1 class="app-topbar-title" id="app-topbar-title">Lộ trình</h1>
+      </div>
+
+      <div class="app-topbar-right">
+        <div class="top-stats">
+          <span class="top-stat streak" title="Chuỗi ngày học">🔥 <b id="top-stat-streak">0</b></span>
+          <span class="top-stat gem" title="Tổng XP">💎 <b id="top-stat-xp">0</b></span>
+          <span class="top-stat heart" title="Năng lượng">❤️ <b>∞</b></span>
+          <span class="top-stat level" title="Cấp độ">⭐ <b id="top-stat-level">1</b> <small>LV</small></span>
+        </div>
+        <button type="button" class="app-icon-btn history-pill-btn" id="btn-open-exam-history" title="Lịch sử làm bài">
+          <span class="topbar-icon">🕒</span>
+        </button>
+        <button type="button" class="app-icon-btn" id="btn-toggle-sfx" title="Bật/Tắt âm thanh hiệu ứng">🔊</button>
+        <button type="button" class="app-icon-btn" id="nav-btn-admin-top" data-view="admin" title="Trang Quản trị" style="display: none;">⚙️</button>
+        <button type="button" class="app-icon-btn harvest-pill-btn" id="btn-topbar-harvest" title="Nạp nhanh từ mới vào kho vĩnh viễn (Download)">
+          <span class="topbar-icon">⬇️</span>
+        </button>
+        <div id="auth-section" class="app-topbar-auth">
+          <button class="app-icon-btn bell-pill-btn" id="btn-topbar-account" title="Tài khoản / Đăng nhập">🔔</button>
+          <button class="btn btn-primary" id="btn-open-login" style="display: none;">Đăng nhập</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden compatibility bridge for existing status metrics -->
+    <div class="quick-status-ribbon-hidden" style="display: none;">
+      <span id="ribbon-lang-badge">🇨🇳 Tiếng Trung • Chuẩn HSK 1–6</span>
+      <span id="ribbon-tip-text"></span>
+      <strong id="ribbon-streak-val">0</strong>
+      <strong id="ribbon-xp-val">0/50</strong>
+      <button type="button" id="ribbon-btn-quick-written"></button>
+      <button type="button" id="ribbon-btn-quick-quiz"></button>
+    </div>
+  </header>
+
+  <!-- Main Content Views -->
+  <main class="container app-content-main">
+
+    <!-- 1. DASHBOARD VIEW -->
+    <section class="view-section" id="view-dashboard">
+      <!-- Page head: big title + one-liner + chunky CTA -->
+      <div class="page-head">
+        <div>
+          <h1 class="page-title" id="dash-greeting">Chào mừng đến PolyLearn!</h1>
+          <p class="page-sub" id="dash-subtitle">Mỗi ngày một ải nhỏ — tích XP và lên cấp!</p>
+          <span id="dash-lang-standard-tag" hidden></span>
+          <span id="dash-today-date-label" hidden></span>
+          <span id="dash-mastery-motto" hidden></span>
+          <span id="dash-streak" hidden><span id="dash-streak-count">0</span></span>
+        </div>
+        <button type="button" class="chunky-btn" id="btn-dash-go-exam">🎯 Vào thi ngay</button>
+      </div>
+
+      <!-- Hero quest card with mascot speech bubble -->
+      <div class="quest-banner">
+        <div class="quest-banner-main">
+          <div class="quest-banner-tag">
+            <span id="dash-level-badge">⭐ Cấp 1</span> • <span id="dash-rank-title">🌱 Tân Binh Ngôn Ngữ</span>
+          </div>
+          <h2 class="quest-banner-title"><span id="dash-goal-status">🎯 Mục tiêu hôm nay</span></h2>
+          <div class="quest-banner-progress">
+            <div class="quest-banner-track"><div class="quest-banner-fill" id="dash-goal-fill" style="width: 0%;"></div></div>
+            <span class="quest-banner-xp"><span id="dash-today-xp">0</span>/<span id="dash-goal-xp">50</span> XP • Tổng <span id="dash-total-xp">0 XP</span></span>
+          </div>
+          <div class="quest-banner-actions">
+            <button type="button" class="quest-pill-btn solid" data-goto="lessons">▶ Học tiếp</button>
+            <button type="button" class="quest-pill-btn" id="btn-dash-go-profile">🎒 Linh vật</button>
+          </div>
+        </div>
+        <div class="quest-banner-mascot">
+          <div class="speech-bubble">Cùng chinh phục ải hôm nay nhé!</div>
+          <div class="hero-mascot-figure" id="hero-mascot-figure" title="Chạm để nhận cổ vũ!"></div>
+        </div>
+      </div>
+
+      <!-- Big icon tiles: minimal text -->
+      <div class="quick-tiles">
+        <button type="button" class="quick-tile t-blue" data-goto="lessons"><span class="qt-ico">🗺️</span><span class="qt-label">Lộ trình &amp; Từ vựng</span></button>
+        <button type="button" class="quick-tile t-orange" data-exam-launch="combined"><span class="qt-ico">🎯</span><span class="qt-label">Thi tổng hợp</span></button>
+        <button type="button" class="quick-tile t-green" data-exam-launch="written"><span class="qt-ico">✍️</span><span class="qt-label">Tự luận</span></button>
+        <button type="button" class="quick-tile t-purple" data-goto="mistakes"><span class="qt-ico">⚠️</span><span class="qt-label">Câu &amp; Từ sai (<span id="dash-mistakes-tile-count">0</span>)</span></button>
+        <button type="button" class="quick-tile t-pink" data-goto="ai"><span class="qt-ico">🤖</span><span class="qt-label">AI Lab</span></button>
+      </div>
+
+      <!-- Bento Row 1: Daily Quests + Word of the Day Spotlight -->
+      <div class="bento-two-col" style="margin-bottom: 22px;">
+        <!-- Daily Quests Checklist -->
+        <div class="glass-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-card-title">🎯 Nhiệm vụ hôm nay</h3>
+              <p class="section-card-desc">Hoàn thành các mục tiêu nhỏ mỗi ngày để rèn cả phản xạ Trắc nghiệm lẫn kỹ năng viết Tự luận.</p>
+            </div>
+            <span class="card-tag" id="dash-quests-badge">0/4 Hoàn thành</span>
+          </div>
+          <div class="quest-list" id="dash-daily-quests">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Word of the Day Spotlight -->
+        <div class="glass-card spotlight-word-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-card-title">🌟 Từ của ngày</h3>
+              <p class="section-card-desc">Khám phá ngẫu nhiên từ kho từ vựng vĩnh viễn của bạn.</p>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn btn-secondary" id="btn-spotlight-refresh" style="padding: 5px 10px; font-size: 0.78rem;" title="Đổi từ ngẫu nhiên khác">🔄 Đổi từ</button>
+              <button type="button" class="speaker-btn" id="btn-spotlight-speak" style="width: 32px; height: 32px; font-size: 0.9rem;" title="Nghe phát âm">🔊</button>
+            </div>
+          </div>
+          <div id="dash-word-spotlight">
+            <div style="color: var(--text-muted); font-size: 0.9rem; padding: 20px 0;">Đang chọn từ vựng tâm điểm...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bento Row 2: Exam Arena Quick Hub + 14-Day Activity & Recent Exams -->
+      <div class="bento-two-col">
+        <!-- Exam Mode Quick Launch & Mastery Breakdown -->
+        <div class="glass-card">
+          <div class="section-card-header">
+            <div>
+              <h3 class="section-card-title">📝 Chọn kiểu thi</h3>
+              <p class="section-card-desc">Chọn nhanh hình thức kiểm tra để đánh giá nhận diện từ, chính tả viết từ và đặt câu cùng AI.</p>
+            </div>
+            <button type="button" class="btn btn-secondary" data-goto="quizzes" style="padding: 6px 12px; font-size: 0.8rem;">Tùy chỉnh đề &rarr;</button>
+          </div>
+
+          <div class="dash-exam-modes-grid">
+            <button type="button" class="dash-exam-mode-card" data-exam-launch="combined">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 1.25rem;">🔥</span>
+                <span class="card-tag" style="font-size: 0.7rem; padding: 2px 8px;">Khuyên dùng</span>
+              </div>
+              <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">Tổng hợp</div>
+              
+            </button>
+
+            <button type="button" class="dash-exam-mode-card" data-exam-launch="mcq">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 1.25rem;">📝</span>
+                <span style="font-size: 0.74rem; font-weight: 700; color: var(--accent-primary);">+10 XP/câu</span>
+              </div>
+              <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">Trắc nghiệm</div>
+              
+            </button>
+
+            <button type="button" class="dash-exam-mode-card" data-exam-launch="written">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 1.25rem;">✍️</span>
+                <span style="font-size: 0.74rem; font-weight: 700; color: var(--success-text);">+15 XP/câu</span>
+              </div>
+              <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.98rem; color: var(--text-primary);">Tự luận</div>
+              
+            </button>
+          </div>
+
+          <div id="dash-vocab-mastery-bar" style="margin-top: 14px; padding: 11px 14px; border-radius: var(--radius-md); background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle);">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- 14-Day Streak Mini Strip + Recent Quiz Attempts -->
+        <div class="glass-card" style="display: flex; flex-direction: column; justify-content: space-between; gap: 16px;">
+          <div>
+            <div class="section-card-header" style="margin-bottom: 10px;">
+              <h3 class="section-card-title">🔥 14 ngày gần đây</h3>
+              <button type="button" class="btn btn-secondary" data-goto="quizzes" style="padding: 5px 12px; font-size: 0.78rem;">Làm đề mới</button>
+            </div>
+            <div class="mini-streak-row" id="dash-mini-streak">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <div>
+            <div style="font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 8px;">
+              Gần đây
+            </div>
+            <div id="dash-recent-quizzes" class="compact-history-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. UNIFIED ROADMAP, VOCABULARY & MISTAKE NOTEBOOK VIEW (GỘP CHUNG LỘ TRÌNH + TỪ VỰNG + LỖI SAI) -->
+    <section class="view-section active" id="view-lessons">
+      <!-- Page head: Title + Subtitle + Chunky Action Button -->
+      <div class="page-head">
+        <div>
+          <h1 class="page-title" id="lesson-page-title">Lộ Trình &amp; Kho Từ Vựng</h1>
+          <p class="page-sub" id="lesson-page-sub">Gộp chung Lộ trình vượt ải, Kho từ vựng vĩnh viễn và Sổ tay tự động lưu các câu &amp; từ làm sai!</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="chunky-btn-pink" id="btn-lesson-change-lang" title="Đổi sang ngôn ngữ / môn học khác">
+            ĐỔI MÔN HỌC
+            <span style="font-size: 0.95rem; line-height: 1;">📊</span>
+          </button>
+          <button type="button" class="chunky-btn" id="btn-lesson-continue-quest">⚔️ Vượt ải tiếp</button>
+        </div>
+      </div>
+
+      <!-- UNIFIED SUB-NAVIGATION BAR (Gộp chung Lộ trình + Từ vựng + Câu/Từ làm sai) -->
+      <div class="unified-roadmap-bar" id="unified-roadmap-tabs">
+        <button type="button" class="unified-subtab-btn active" data-subtab="all" id="subtab-btn-all">
+          <span>🗺️ Gộp Chung: Lộ Trình &amp; Từ Vựng</span>
+        </button>
+        <button type="button" class="unified-subtab-btn" data-subtab="roadmap" id="subtab-btn-roadmap">
+          <span>⚔️ Bài Học Theo Ải</span>
+        </button>
+        <button type="button" class="unified-subtab-btn" data-subtab="vocab" id="subtab-btn-vocab">
+          <span>📚 Kho Từ Vựng &amp; Vượt Mốc</span>
+        </button>
+        <button type="button" class="unified-subtab-btn mistake-subtab" data-subtab="mistakes" id="subtab-btn-mistakes">
+          <span>⚠️ Câu &amp; Từ Đã Sai</span>
+          <span class="mistake-badge-pill" id="mistakes-tab-badge">0</span>
+        </button>
+      </div>
+
+      <!-- Quick Alert Banner when user has saved mistakes -->
+      <div id="roadmap-mistakes-alert" class="mistakes-alert-banner" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span style="font-size: 1.55rem;">⚠️</span>
+          <div>
+            <div style="font-weight: 800; color: var(--text-primary); font-size: 0.96rem;" id="roadmap-mistakes-alert-title">
+              Bạn đang có 0 câu hỏi &amp; từ vựng làm sai đã được lưu tự động!
+            </div>
+            <div style="font-size: 0.83rem; color: var(--text-secondary);">
+              Mỗi khi bạn chọn sai trong Bài học, Đề kiểm tra hoặc Đấu trường từ vựng, hệ thống tự động lưu lại để bạn ôn tập.
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-primary" id="btn-alert-practice-mistakes" style="padding: 8px 16px; font-size: 0.85rem; background: linear-gradient(135deg, #ef4444 0%, #ea580c 100%);">
+            🔥 Làm lại câu &amp; từ sai ngay
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-alert-view-mistakes" style="padding: 8px 14px; font-size: 0.85rem;">
+            📋 Xem danh sách đã sai
+          </button>
+        </div>
+      </div>
+
+      <!-- PART A: STAGE ROADMAP & LESSON STATIONS -->
+      <div id="lessons-roadmap-subview">
+        <!-- Horizontal Stage / Ải Carousel Switcher -->
+        <div class="stage-carousel-container">
+          <button type="button" class="stage-arrow-btn" id="btn-stage-prev" title="Ải trước">‹ Ải trước</button>
+          <div class="stage-pills-track" id="lesson-stage-pills">
+            <!-- Rendered via JS: [ Ải 1: HSK 1 ] [ Ải 2: HSK 2 ] ... -->
+          </div>
+          <button type="button" class="stage-arrow-btn" id="btn-stage-next" title="Ải sau">Ải sau ›</button>
+        </div>
+
+        <!-- Big Hero Stage Banner -->
+        <div class="stage-hero-banner" id="lesson-stage-hero">
+          <div class="stage-hero-left">
+            <div class="stage-badge-row">
+              <span class="stage-tag" id="stage-hero-badge">⚔️ CỬA ẢI 1 • ĐANG CHINH PHỤC</span>
+              <span class="stage-stat-pill" id="stage-hero-lessons-count">0/0 Bài học</span>
+            </div>
+            <h2 class="stage-hero-title" id="stage-hero-title">01. Bài 1: Khởi động</h2>
+            <div class="stage-hero-progress-box">
+              <div class="stage-hero-track">
+                <div class="stage-hero-fill" id="stage-hero-progress-fill" style="width: 0%;"></div>
+              </div>
+              <span class="stage-hero-progress-text" id="stage-hero-progress-text">Đã hoàn thành 0/0 bài học (0%)</span>
+            </div>
+            <div class="stage-hero-actions" style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button type="button" class="chunky-btn" id="btn-stage-hero-action" style="padding: 10px 24px; font-size: 0.92rem;">
+                ⚔️ Bắt đầu bài học (+25 XP)
+              </button>
+              <button type="button" class="chunky-btn-pink" id="btn-stage-jump-vocab" style="padding: 10px 18px; font-size: 0.86rem;">
+                📚 Từ vựng &amp; Đấu trường mốc ↓
+              </button>
+            </div>
+          </div>
+          <div class="stage-hero-right">
+            <div class="speech-bubble" id="stage-hero-mascot-speech">Cùng chinh phục cửa ải này nhé!</div>
+            <div class="hero-mascot-figure stage-mascot-fig" id="stage-hero-mascot-figure" title="Nhấp vào linh vật để nhận lời cổ vũ!"></div>
+          </div>
+        </div>
+
+        <!-- Stage Lesson Stations Grid / Track -->
+        <div class="stage-stations-section" style="margin-bottom: 28px;">
+          <div class="stage-stations-head">
+            <h3 class="stage-stations-heading" id="stage-stations-heading">
+              Danh sách bài học trong ải
+            </h3>
+            <div class="filter-tabs" id="lesson-type-tabs" style="margin-bottom: 0;">
+              <button class="btn btn-secondary active lesson-filter-btn" data-type="all">Tất cả</button>
+              <button class="btn btn-secondary lesson-filter-btn" data-type="0">🟢 Từ vựng</button>
+              <button class="btn btn-secondary lesson-filter-btn" data-type="1">🟣 Luyện nghe</button>
+              <button class="btn btn-secondary lesson-filter-btn" data-type="2">🔵 Đọc hiểu</button>
+            </div>
+          </div>
+
+          <!-- Hidden elements for backward compatibility -->
+          <input type="hidden" id="lesson-search-input">
+          <select id="lesson-level-select" style="display: none;"></select>
+          <div id="lesson-level-roadmap" style="display: none;"></div>
+          <div id="lesson-next-banner" style="display: none;"></div>
+          <span id="lesson-progress-percent" style="display: none;">0%</span>
+          <span id="lesson-progress-text" style="display: none;"></span>
+          <div id="lesson-progress-fill" style="display: none;"></div>
+          <span id="lesson-count-vocab" style="display: none;"></span>
+          <span id="lesson-count-listen" style="display: none;"></span>
+          <span id="lesson-count-read" style="display: none;"></span>
+
+          <!-- The Stations List / Cards Grid -->
+          <div class="stage-stations-grid" id="lessons-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- PART B: MERGED VOCABULARY EXPLORER & GAMIFIED MILESTONE QUEST -->
+      <div id="lessons-vocab-subview" style="margin-bottom: 28px;">
+        <!-- Top Header & Permanent Harvester -->
+        <div class="toolbar-surface" style="margin-bottom: 14px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <h2 style="font-family: 'Outfit'; font-size: 1.55rem; margin: 0;">📚 Kho Từ Vựng &amp; Bản Đồ Vượt Mốc</h2>
+            <span class="card-tag" id="words-total-badge" style="font-size: 0.85rem; padding: 5px 14px;">📦 Kho vĩnh viễn: 0 từ</span>
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+            <select class="lang-select" id="words-harvest-topic" style="font-size: 0.85rem; padding: 9px 12px;">
+              <option value="random">🎲 Chủ đề ngẫu nhiên</option>
+              <option value="technology">💻 Công nghệ &amp; AI</option>
+              <option value="travel">✈️ Du lịch</option>
+              <option value="business">💼 Công việc</option>
+              <option value="food">🍜 Ẩm thực</option>
+              <option value="health">💪 Sức khỏe</option>
+              <option value="culture">🎎 Văn hóa</option>
+            </select>
+            <button class="btn btn-primary" id="btn-words-harvest" style="padding: 9px 16px; font-size: 0.88rem;">🌐 +8 từ mới</button>
+            <button class="btn btn-secondary" id="btn-words-quick-quiz" style="padding: 9px 16px; font-size: 0.88rem;">🎲 Tạo đề</button>
+          </div>
+        </div>
+
+        <!-- Mode Switcher Bar: Classic Dictionary Grid vs Quest Adventure -->
+        <div class="words-view-toggle-bar" style="margin-bottom: 16px;">
+          <div class="words-mode-pills">
+            <button type="button" class="words-mode-pill active" id="btn-mode-grid">
+              📋 Tra Cứu Từ Điển &amp; Phân Tích AI
+            </button>
+            <button type="button" class="words-mode-pill" id="btn-mode-quest">
+              🎮 Đấu Trường Vượt Mốc Từ Vựng
+            </button>
+          </div>
+          <div class="quest-player-stats-pill" id="quest-stats-pill">
+            <span title="Tổng số sao đạt được">⭐ <strong id="quest-total-stars">0</strong> Sao</span>
+            <span class="sep">•</span>
+            <span title="Số mốc đã chinh phục">🏆 <strong id="quest-cleared-count">0</strong>/<span id="quest-total-milestones">10</span> Mốc</span>
+            <span class="sep">•</span>
+            <span title="Chuỗi thắng liên tiếp">🔥 <strong id="quest-streak-count">0</strong> Chuỗi</span>
+          </div>
+        </div>
+
+        <!-- CONTAINER 1: CLASSIC MASTER-DETAIL DICTIONARY (Default inside merged view so vocabulary is immediately visible!) -->
+        <div id="words-grid-container" class="words-grid-container">
+          <!-- Search, Level, Sort & Favorites Filter Bar -->
+          <div class="toolbar-surface" style="margin-bottom: 18px; padding: 12px 18px;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center; flex: 1;">
+              <input type="text" class="form-input" id="word-search-input" placeholder="🔍 Tìm kiếm từ, phiên âm hoặc nghĩa..." style="width: 260px; padding: 8px 14px;">
+              <select class="lang-select" id="word-level-filter" style="font-size: 0.85rem; padding: 8px 12px;">
+                <option value="">Tất cả cấp độ</option>
+              </select>
+              <select class="lang-select" id="word-sort-select" style="font-size: 0.85rem; padding: 8px 12px;">
+                <option value="newest">✨ Mới lưu gần đây nhất</option>
+                <option value="random">🎲 Ngẫu nhiên đổi gió</option>
+                <option value="level">📊 Theo thứ tự cấp độ</option>
+              </select>
+              <button class="btn btn-secondary" id="btn-filter-favs" style="padding: 8px 14px; font-size: 0.85rem;">⭐ Đã lưu yêu thích</button>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" class="btn btn-secondary" id="btn-words-prev" style="padding: 6px 12px; font-size: 0.82rem;">&larr; Trước</button>
+              <span style="font-size: 0.84rem; font-weight: 700; color: var(--text-secondary);" id="words-page-info">Trang 1</span>
+              <button type="button" class="btn btn-secondary" id="btn-words-next" style="padding: 6px 12px; font-size: 0.82rem;">Sau &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Master-Detail Dictionary Layout -->
+          <div class="words-master-detail">
+            <!-- Left: Dense Vocabulary Grid -->
+            <div class="words-cards-grid" id="words-grid">
+              <!-- Rendered via JS -->
+            </div>
+
+            <!-- Right: Sticky Word Detail & AI Deep-Dive Inspector -->
+            <aside class="glass-card word-inspector-panel" id="word-inspector-card">
+              <div id="word-inspector-content">
+                <div style="text-align: center; padding: 36px 16px; color: var(--text-muted);">
+                  <div style="font-size: 2.4rem; margin-bottom: 8px;">📖</div>
+                  <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Chi Tiết Từ Vựng &amp; Phân Tích AI</div>
+                  <p style="font-size: 0.86rem;">Nhấp vào bất kỳ thẻ từ vựng nào bên trái để xem câu ví dụ song ngữ, nghe phát âm và phân tích ngữ cảnh chuyên sâu bằng AI.</p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <!-- CONTAINER 2: GAMIFIED MILESTONE ROADMAP (Toggleable) -->
+        <div id="words-quest-container" class="quest-container" style="display: none;">
+          <!-- Hero Player Banner -->
+          <div class="quest-hero-card">
+            <div class="quest-hero-left">
+              <div class="quest-hero-avatar-wrap" id="quest-hero-avatar">
+                <div class="quest-hero-avatar-circle">🦉</div>
+              </div>
+              <div>
+                <div class="quest-hero-badge" id="quest-hero-rank">🏅 Tân Binh Vượt Ải • Cấp 1</div>
+                <h3 class="quest-hero-title">Đấu trường vượt mốc từ vựng</h3>
+                <p class="quest-hero-speech" id="quest-mascot-speech">Vượt từng mốc phản xạ từ vựng để mở rương báu!</p>
+              </div>
+            </div>
+            <div class="quest-hero-right">
+              <button type="button" class="btn-quest-loot-chest" id="btn-quest-loot-chest" title="Mở Rương Báu Chiến Công">
+                <span class="loot-chest-icon">🎁</span>
+                <div class="loot-chest-meta">
+                  <span class="loot-chest-title">Rương Báu Mốc</span>
+                  <span class="loot-chest-sub" id="quest-chest-progress">Tích 6 ⭐ để mở</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- The Winding Milestone Roadmap -->
+          <div class="quest-roadmap-frame">
+            <div class="quest-roadmap-track" id="quest-roadmap-track">
+              <!-- Rendered dynamically by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 🎮 GAME ARENA MODAL / OVERLAY FOR PLAYING MILESTONES -->
+        <div id="quest-game-modal" class="quest-game-modal-overlay" style="display: none;">
+          <div class="quest-game-arena-card">
+            <!-- Arena Top HUD -->
+            <div class="arena-top-hud">
+              <div class="hud-left">
+                <div class="hud-milestone-tag" id="arena-milestone-tag">🎯 MỐC 1: KHỞI ĐỘNG</div>
+                <div class="hud-hearts" id="arena-hearts" title="Sinh mệnh">❤️❤️❤️</div>
+              </div>
+              <div class="hud-center">
+                <div class="hud-combo-badge" id="arena-combo-badge">🔥 Combo x1</div>
+              </div>
+              <div class="hud-right">
+                <div class="hud-timer-pill" id="arena-timer">⏱️ 10s</div>
+                <button type="button" class="hud-close-btn" id="btn-close-arena" title="Thoát màn chơi">&times;</button>
+              </div>
+            </div>
+
+            <!-- Progress Bar & Stage Step -->
+            <div class="arena-progress-wrap">
+              <div class="arena-progress-track">
+                <div class="arena-progress-fill" id="arena-progress-fill" style="width: 20%;"></div>
+              </div>
+              <div class="arena-progress-step" id="arena-progress-step">Câu 1 / 5</div>
+            </div>
+
+            <!-- Question Body Container -->
+            <div class="arena-body" id="arena-body">
+              <!-- Dynamically injected: MCQ, Audio Blitz, Speed Match, or Boss Battle -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PART C: MISTAKE NOTEBOOK (SỔ TAY CÂU HỎI & TỪ VỰNG ĐÃ LÀM SAI) -->
+      <div id="lessons-mistakes-subview">
+        <div class="glass-card" style="padding: 22px 24px; border: 2px solid rgba(239, 68, 68, 0.22);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 18px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 style="font-family: 'Outfit'; font-size: 1.55rem; margin: 0; color: var(--text-primary);">
+                  ⚠️ Sổ Tay Câu &amp; Từ Đã Làm Sai
+                </h2>
+                <span class="card-tag" id="mistakes-summary-badge" style="background: rgba(239, 68, 68, 0.14); color: #dc2626; font-weight: 800;">
+                  0 mục cần ôn lại
+                </span>
+              </div>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 6px 0 0;">
+                Hệ thống tự động ghi nhớ mọi <strong>câu hỏi</strong> và <strong>từ vựng</strong> bạn trả lời sai trong Lộ trình bài học, Đề kiểm tra và Đấu trường từ vựng để bạn ôn tập cho đến khi thuộc lòng!
+              </p>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn btn-primary" id="btn-start-mistake-practice" style="background: linear-gradient(135deg, #ef4444 0%, #ea580c 100%); padding: 10px 18px; font-weight: 800;">
+                🔥 Làm Lại Các Câu &amp; Từ Đã Sai
+              </button>
+              <button type="button" class="btn btn-secondary" id="btn-clear-all-mistakes" style="padding: 10px 14px; font-size: 0.85rem;">
+                🗑️ Xóa tất cả
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter Tabs for Mistakes (All / Wrong Words / Wrong Questions) -->
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);">
+            <div class="filter-tabs" id="mistake-filter-tabs" style="margin-bottom: 0;">
+              <button type="button" class="btn btn-secondary active mistake-filter-btn" data-mfilter="all" id="mfilter-btn-all">
+                Tất cả (<span id="mcount-all">0</span>)
+              </button>
+              <button type="button" class="btn btn-secondary mistake-filter-btn" data-mfilter="word" id="mfilter-btn-word">
+                🔤 Từ vựng sai (<span id="mcount-word">0</span>)
+              </button>
+              <button type="button" class="btn btn-secondary mistake-filter-btn" data-mfilter="question" id="mfilter-btn-question">
+                ❓ Câu hỏi sai (<span id="mcount-question">0</span>)
+              </button>
+            </div>
+
+            <label style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; font-weight: 600; color: var(--text-secondary); cursor: pointer;">
+              <input type="checkbox" id="mistake-auto-remove-toggle" checked style="width: 17px; height: 17px; accent-color: var(--success); cursor: pointer;">
+              <span>Tự động xóa khỏi sổ tay khi làm lại đúng</span>
+            </label>
+          </div>
+
+          <!-- Interactive Mistake Practice Workspace (Inline when practicing mistakes) -->
+          <div id="mistake-practice-box" style="display: none; margin-bottom: 22px; padding: 22px; border-radius: var(--radius-lg); background: var(--bg-surface-elevated); border: 2px solid var(--accent-primary);">
+            <!-- Rendered dynamically by JS when user clicks "Làm Lại Các Câu & Từ Đã Sai" -->
+          </div>
+
+          <!-- Saved Mistakes Cards Grid -->
+          <div id="mistakes-list-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 14px;">
+            <!-- Rendered dynamically by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. EXAM & ASSESSMENT VIEW (TRẮC NGHIỆM & TỰ LUẬN) -->
+    <section class="view-section" id="view-quizzes">
+      <!-- 1. OFFICIAL MOCK EXAM HUB (Matching User Screenshot) -->
+      <div id="quiz-setup-box" class="mock-exam-hub-wrap">
+        <!-- Pastel Level Filter Pills Strip -->
+        <div class="level-filter-strip" id="exam-level-pills">
+          <!-- Rendered dynamically by JS: [ Tất cả ] [ HSK 1 ] [ HSK 2 ] [ ✓ HSK 3 ] [ HSK 4 ] [ HSK 5 ] [ HSK 6 ] -->
+          <button type="button" class="level-pill-btn pill-all" data-level="">Tất cả</button>
+          <button type="button" class="level-pill-btn pill-lvl1" data-level-index="1">HSK 1</button>
+          <button type="button" class="level-pill-btn pill-lvl2" data-level-index="2">HSK 2</button>
+          <button type="button" class="level-pill-btn pill-lvl3 active" data-level-index="3">✓ HSK 3</button>
+          <button type="button" class="level-pill-btn pill-lvl4" data-level-index="4">HSK 4</button>
+          <button type="button" class="level-pill-btn pill-lvl5" data-level-index="5">HSK 5</button>
+          <button type="button" class="level-pill-btn pill-lvl6" data-level-index="6">HSK 6</button>
+        </div>
+
+        <!-- Section Header -->
+        <div class="mock-hub-header">
+          <h2 class="mock-hub-title" id="mock-exam-level-heading">HSK 3</h2>
+          <button type="button" class="btn-text-action" id="btn-toggle-custom-drawer" title="Tùy chỉnh đề riêng">
+            ⚙️ Tùy chỉnh đề thi riêng
+          </button>
+        </div>
+
+        <!-- Collapsible Custom Quiz Drawer -->
+        <div id="quiz-custom-drawer" class="custom-exam-drawer glass-card" style="display: none; padding: 22px 24px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+            <span class="card-tag">🪪 Bàn Biên Soạn Đề Tùy Biến</span>
+            <button type="button" class="btn-close-sm" id="btn-close-custom-drawer" style="background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+          </div>
+
+          <!-- 1. Exam Format Selection -->
+          <div style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 0.85rem;">1. Hình thức bài kiểm tra</label>
+            <div class="exam-format-cards" id="quiz-format-group">
+              <button type="button" class="exam-format-card active" data-format="combined">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 1.2rem;">🔥</span>
+                  <span class="card-tag" style="font-size: 0.68rem; padding: 2px 7px;">Mặc định</span>
+                </div>
+                <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">Kết hợp TN + Tự luận</div>
+                <div style="font-size: 0.77rem; color: var(--text-secondary); line-height: 1.35; margin-top: 2px;">Trắc nghiệm + Viết từ &amp; Đặt câu</div>
+              </button>
+
+              <button type="button" class="exam-format-card" data-format="mcq">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 1.2rem;">📝</span>
+                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--accent-primary);">A / B / C / D</span>
+                </div>
+                <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">Chuyên Trắc nghiệm</div>
+                <div style="font-size: 0.77rem; color: var(--text-secondary); line-height: 1.35; margin-top: 2px;">100% chọn đáp án nhanh</div>
+              </button>
+
+              <button type="button" class="exam-format-card" data-format="written">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <span style="font-size: 1.2rem;">✍️</span>
+                  <span style="font-size: 0.72rem; font-weight: 700; color: var(--success-text);">AI Chấm</span>
+                </div>
+                <div style="font-family: 'Outfit'; font-weight: 800; font-size: 0.95rem; color: var(--text-primary);">Chuyên Tự luận</div>
+                <div style="font-size: 0.77rem; color: var(--text-secondary); line-height: 1.35; margin-top: 2px;">Viết từ &amp; AI chấm ngữ pháp</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- 2. Source Mode Selection -->
+          <div style="margin-bottom: 16px;">
+            <label class="form-label" style="font-size: 0.85rem;">2. Nguồn câu hỏi &amp; Từ vựng</label>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 10px;" id="quiz-mode-group">
+              <button type="button" class="btn btn-secondary quiz-mode-btn active" data-mode="vocab_random" style="justify-content: flex-start; padding: 10px 12px; font-size: 0.85rem;">
+                🎲 Từ vựng ngẫu nhiên
+              </button>
+              <button type="button" class="btn btn-secondary quiz-mode-btn" data-mode="mixed" style="justify-content: flex-start; padding: 10px 12px; font-size: 0.85rem;">
+                ⚡ Kết hợp Từ vựng + Đề chuẩn
+              </button>
+              <button type="button" class="btn btn-secondary quiz-mode-btn" data-mode="bank" style="justify-content: flex-start; padding: 10px 12px; font-size: 0.85rem;">
+                📚 Ngân hàng đề có sẵn
+              </button>
+            </div>
+          </div>
+
+          <!-- Harvest Toggle Box -->
+          <div class="harvest-config-box" style="margin-bottom: 18px;">
+            <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer;">
+              <input type="checkbox" id="quiz-harvest-toggle" checked style="width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent-primary); cursor: pointer;">
+              <div style="flex: 1;">
+                <div style="font-weight: 700; color: var(--text-primary); font-size: 0.92rem;">
+                  🌐 Tự động lấy thêm từ mới &amp; lưu vĩnh viễn vào CSDL
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 2px;">
+                  Săn từ vựng chưa có (AI / Từ điển quốc tế), lưu vĩnh viễn vào SQL Server và đưa ngay vào bài thi!
+                </div>
+              </div>
+            </label>
+
+            <div id="quiz-harvest-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border-subtle);">
+              <div>
+                <label class="form-label" style="font-size: 0.8rem;">Chủ đề từ vựng</label>
+                <select class="form-input" id="quiz-topic-select" style="padding: 8px 12px; font-size: 0.85rem;">
+                  <option value="random">🎲 Ngẫu nhiên mọi chủ đề</option>
+                  <option value="technology">💻 Công nghệ &amp; AI</option>
+                  <option value="travel">✈️ Du lịch &amp; Giao thông</option>
+                  <option value="business">💼 Công sở &amp; Kinh doanh</option>
+                  <option value="food">🍜 Ẩm thực &amp; Đời sống</option>
+                  <option value="health">💪 Sức khỏe &amp; Cảm xúc</option>
+                  <option value="culture">🎎 Văn hóa &amp; Giải trí</option>
+                  <option value="custom">✍️ Tự nhập chủ đề...</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label" style="font-size: 0.8rem;">Số từ mới lưu vĩnh viễn</label>
+                <select class="form-input" id="quiz-new-words-count" style="padding: 8px 12px; font-size: 0.85rem;">
+                  <option value="3">+3 từ mới / đề</option>
+                  <option value="5" selected>+5 từ mới / đề</option>
+                  <option value="8">+8 từ mới / đề</option>
+                </select>
+              </div>
+              <div id="quiz-custom-topic-wrap" style="grid-column: 1 / -1; display: none;">
+                <input type="text" class="form-input" id="quiz-custom-topic" placeholder="Nhập chủ đề bạn muốn học..." style="padding: 8px 12px; font-size: 0.85rem;">
+              </div>
+            </div>
+          </div>
+
+          <!-- Level & Quantity Selection -->
+          <div style="display: grid; grid-template-columns: 1fr 1.25fr; gap: 14px; align-items: end; margin-bottom: 20px;">
+            <div>
+              <label class="form-label" style="font-size: 0.85rem;">Cấp độ từ vựng</label>
+              <select class="form-input" id="quiz-level-select" style="padding: 9px 12px; font-size: 0.88rem;">
+                <option value="">Tất cả cấp độ</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label" style="font-size: 0.85rem;">Số câu hỏi</label>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary quiz-qty-btn" data-qty="5" style="flex: 1; padding: 8px 8px; font-size: 0.85rem;">5 Câu</button>
+                <button type="button" class="btn btn-secondary quiz-qty-btn active" data-qty="10" style="flex: 1; padding: 8px 8px; font-size: 0.85rem;">10 Câu</button>
+                <button type="button" class="btn btn-secondary quiz-qty-btn" data-qty="15" style="flex: 1; padding: 8px 8px; font-size: 0.85rem;">15 Câu</button>
+                <button type="button" class="btn btn-secondary quiz-qty-btn" data-qty="20" style="flex: 1; padding: 8px 8px; font-size: 0.85rem;">20 Câu</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" id="btn-start-quiz" style="padding: 12px 24px; font-size: 0.98rem; width: 100%;">
+            📝 Bắt đầu làm bài tùy biến ngay
+          </button>
+        </div>
+
+        <!-- 2-Column Mock Exams Cards Grid (Matching screenshot: Đề 1 .. Đề 10) -->
+        <div class="mock-exams-grid" id="mock-exams-container">
+          <!-- Rendered dynamically by renderMockExamsGrid() in app.js -->
+        </div>
+      </div>
+
+      <!-- 2. EXAM PLAYING WORKSPACE (Countdown Timer, 3 Section Tabs & TTS Player) -->
+      <div id="quiz-playing-box" style="display: none;">
+        <div id="quiz-playing-harvest-banner" style="display: none; margin-bottom: 14px; padding: 10px 16px; border-radius: var(--radius-md); background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); color: var(--success-text); font-size: 0.88rem; font-weight: 600;"></div>
+
+        <!-- Exam Play Top Bar: Section tabs + Timer pill + Quit btn -->
+        <div class="exam-play-header-bar">
+          <div class="exam-section-tabs" id="quiz-section-tabs">
+            <button type="button" class="exam-sec-tab active" data-sec="listening">🎧 Nghe (1–40)</button>
+            <button type="button" class="exam-sec-tab" data-sec="reading">📖 Đọc (41–70)</button>
+            <button type="button" class="exam-sec-tab" data-sec="writing">✏️ Viết (71–80)</button>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div class="exam-timer-pill" id="quiz-timer-badge">⏱️ 65:00</div>
+            <button class="btn btn-secondary" id="btn-quit-quiz" style="padding: 6px 14px; font-size: 0.82rem;">✕ Hủy bài</button>
+          </div>
+        </div>
+
+        <div class="studio-two-col" style="margin-top: 14px;">
+          <!-- Left: Question Arena -->
+          <div>
+            <div class="glass-card" style="padding: 24px 28px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <span style="font-weight: 800; color: var(--accent-primary); font-family: 'Outfit'; font-size: 1.05rem;" id="quiz-progress-text">Câu hỏi 1 / 80</span>
+                  <span class="card-tag" id="quiz-question-type-badge">🎧 Phần I • Nghe</span>
+                </div>
+              </div>
+
+              <div class="progress-bar-track" style="height: 8px; margin-bottom: 20px;">
+                <div class="progress-bar-fill" id="quiz-progress-bar-fill" style="width: 1%;"></div>
+              </div>
+
+              <!-- Listening TTS Player Box (visible when section === 'listening') -->
+              <div id="quiz-listening-box" class="listening-player-box" style="display: none;">
+                <div class="listening-player-left">
+                  <div class="listening-pulse-dot"></div>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem; color: #1e3a8a;">🎧 Đoạn Nghe Đang Phát</div>
+                    <div style="font-size: 0.78rem; color: #475569;">Bấm nghe rõ từng từ hoặc nghe ở tốc độ chậm để luyện phản xạ</div>
+                  </div>
+                </div>
+                <div class="listening-player-actions">
+                  <button type="button" class="btn btn-primary" id="btn-quiz-play-audio" style="padding: 8px 16px; font-size: 0.88rem;">🔊 Phát đoạn nghe</button>
+                  <button type="button" class="btn btn-secondary" id="btn-quiz-play-slow" style="padding: 8px 14px; font-size: 0.85rem;">🐢 Nghe chậm 0.75x</button>
+                </div>
+              </div>
+
+              <h3 style="font-size: 1.35rem; font-family: 'Outfit'; margin-bottom: 18px; line-height: 1.45;" id="quiz-question-text">Câu hỏi ở đây</h3>
+
+              <!-- Multiple Choice Options (shown when QuestionType === 'mcq') -->
+              <div id="quiz-options-list">
+                <!-- Rendered options -->
+              </div>
+
+              <!-- Written / Constructed Response Workspace (shown when QuestionType === 'written') -->
+              <div id="quiz-written-workspace" class="written-answer-box" style="display: none;">
+                <div id="quiz-written-target-chip" class="written-target-banner" style="display: none;">
+                  <div>
+                    <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Từ vựng bắt buộc sử dụng:</span>
+                    <strong style="font-family: 'Outfit'; font-size: 1.15rem; color: var(--accent-primary); margin-left: 8px;" id="quiz-written-target-word"></strong>
+                  </div>
+                  <button type="button" class="speaker-btn" id="btn-quiz-speak-target" style="width: 32px; height: 32px; font-size: 0.85rem;" title="Nghe phát âm từ mục tiêu">🔊</button>
+                </div>
+
+                <input type="text" class="form-input written-main-input" id="quiz-written-input" autocomplete="off" spellcheck="false" placeholder="Nhập chính xác từ vựng trả lời tại đây...">
+
+                <textarea class="form-input written-main-textarea" id="quiz-written-textarea" rows="3" placeholder="Nhập câu hoàn chỉnh bằng ngôn ngữ đang học (có sử dụng từ cho trước)..." style="display: none;"></textarea>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+                  <button type="button" class="btn btn-secondary" id="btn-quiz-toggle-hint" style="padding: 6px 12px; font-size: 0.8rem;">
+                    💡 Xem gợi ý đáp án
+                  </button>
+                  <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;" id="quiz-written-counter">0 ký tự</span>
+                </div>
+
+                <div id="quiz-written-hint-box" class="written-hint-box" style="display: none;"></div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 22px; gap: 12px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-secondary" id="btn-prev-question" style="padding: 10px 18px;">&larr; Câu trước</button>
+                <span style="font-size: 0.78rem; color: var(--text-muted);" id="quiz-kbd-guide">Phím <code>1–4</code> chọn đáp án • <code>Enter</code> tiếp tục</span>
+                <button type="button" class="btn btn-primary" id="btn-next-question">Câu tiếp theo &rarr;</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Sidebar: Question Palette & Submit -->
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="glass-card" id="quiz-nav-palette-card" style="padding: 20px 22px;">
+              <div class="section-card-header" style="margin-bottom: 8px;">
+                <h3 class="section-card-title" style="font-size: 1.05rem;">🧭 Sơ Đồ Đề Thi</h3>
+                <span class="card-tag" id="quiz-answered-count-badge">Đã làm 0/80</span>
+              </div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); margin-bottom: 10px;">
+                🎧: <strong>Nghe</strong> • 📖: <strong>Đọc</strong> • ✍️: <strong>Viết</strong>
+              </div>
+              <div class="question-palette-grid" id="quiz-palette-grid">
+                <!-- Rendered via JS -->
+              </div>
+              <button type="button" class="btn btn-success" id="btn-sidebar-submit-quiz" style="width: 100%; margin-top: 16px; padding: 12px; font-size: 0.95rem; font-weight: 700;">
+                ✓ Nộp bài &amp; Chấm điểm ngay
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. EXAM RESULT & REVIEW WORKSPACE -->
+      <div id="quiz-result-box" class="glass-card" style="display: none; padding: 32px; text-align: center;">
+        <h2 style="font-family: 'Outfit'; font-size: 2.1rem;" id="quiz-result-title">Kết Quả Bài Kiểm Tra</h2>
+        <div style="font-size: 3.4rem; font-weight: 800; font-family: 'Outfit'; margin: 10px 0;" id="quiz-result-score">0 / 0</div>
+        <p style="font-size: 1.12rem; color: var(--success-text); font-weight: 700; margin-bottom: 14px;" id="quiz-result-percent">Tỉ lệ chính xác: 0%</p>
+
+        <!-- 3-Skill Breakdown Pills (Nghe / Đọc / Viết) -->
+        <div class="result-breakdown-pills" id="quiz-result-breakdown"></div>
+
+        <div id="quiz-result-harvest-showcase" style="display: none; text-align: left; margin-bottom: 24px; padding: 16px 18px; border-radius: var(--radius-md); background: var(--bg-surface-elevated); border: 1px solid var(--border-highlight);"></div>
+        
+        <div id="quiz-result-mistakes-banner" style="display: none; text-align: left; margin-top: 18px; padding: 14px 18px; border-radius: var(--radius-md); background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.28);"></div>
+
+        <div id="quiz-answers-review" style="text-align: left; margin-top: 20px;"></div>
+        
+        <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-top: 24px;">
+          <button class="btn btn-primary" id="btn-quick-rematch-quiz">📝 Làm lại đề này</button>
+          <button class="btn btn-secondary" id="btn-quiz-result-go-mistakes" style="border-color: rgba(239, 68, 68, 0.45); color: #dc2626; font-weight: 700;">⚠️ Xem Sổ Tay Câu/Từ Đã Sai</button>
+          <button class="btn btn-secondary" id="btn-restart-quiz">← Về danh sách đề thi</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. AI ASSISTANT STUDIO VIEW -->
+    <section class="view-section" id="view-ai">
+      <!-- Lab Overview Header -->
+      <div class="toolbar-surface" style="margin-bottom: 20px;">
+        <div>
+          <span class="card-tag" style="margin-bottom: 6px; display: inline-block;">🤖 AI Language Immersion Studio</span>
+          <h2 style="font-family: 'Outfit'; font-size: 1.75rem;">Phòng Thực Hành Ngôn Ngữ Trí Tuệ Nhân Tạo</h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem;">Tích hợp 3 công cụ thực chiến: Sửa lỗi ngữ pháp tự nhiên • Giải thích sâu từ/thành ngữ • Nhập vai giao tiếp đa tình huống.</p>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <span class="mini-stat-pill">✏️ Chấm câu &amp; Gợi ý diễn đạt</span>
+          <span class="mini-stat-pill">🔍 Phân tích sắc thái từ</span>
+          <span class="mini-stat-pill">🎙️ Nghe phát âm câu thoại AI</span>
+        </div>
+      </div>
+
+      <div class="studio-two-col">
+        <!-- Left Column: Grammar Checker + Deep Word/Idiom Explainer -->
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          <!-- Tool 1: Grammar Checker -->
+          <div class="glass-card" style="padding: 22px 24px;">
+            <h3 style="font-family: 'Outfit'; font-size: 1.28rem; margin-bottom: 4px;">✏️ 1. Kiểm Tra &amp; Nâng Cấp Ngữ Pháp</h3>
+            <p style="color: var(--text-secondary); font-size: 0.86rem; margin-bottom: 12px;">Nhập câu bất kỳ hoặc bấm thử câu mẫu bên dưới để AI sửa lỗi và gợi ý cách nói tự nhiên như người bản xứ.</p>
+
+            <div class="sample-chips-row" id="ai-grammar-samples" style="margin-bottom: 12px;">
+              <!-- Rendered dynamically per active language -->
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+              <textarea class="form-input" id="ai-grammar-input" rows="3" placeholder="Nhập câu của bạn (vd: He go to school yesterday)..." style="resize: vertical;"></textarea>
+            </div>
+            <button class="btn btn-primary" id="btn-check-grammar" style="width: 100%;">✨ Kiểm tra &amp; Sửa ngữ pháp</button>
+
+            <div id="ai-grammar-result" style="margin-top: 16px; display: none;"></div>
+          </div>
+
+          <!-- Tool 2: AI Word / Phrase / Idiom Explainer -->
+          <div class="glass-card" style="padding: 22px 24px;">
+            <h3 style="font-family: 'Outfit'; font-size: 1.28rem; margin-bottom: 4px;">🔍 2. Giải Thích Từ Vựng, Thành Ngữ &amp; Sắc Thái</h3>
+            <p style="color: var(--text-secondary); font-size: 0.86rem; margin-bottom: 12px;">Tra cứu cách dùng thực tế, sắc thái trang trọng/thân mật và ví dụ đặt câu cho bất kỳ từ hoặc cụm từ nào.</p>
+
+            <div class="sample-chips-row" id="ai-explain-samples" style="margin-bottom: 12px;">
+              <!-- Rendered dynamically per active language -->
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <input type="text" class="form-input" id="ai-explain-term-input" placeholder="Nhập từ, cụm từ hoặc ngữ pháp cần giải thích...">
+              <button type="button" class="btn btn-primary" id="btn-ai-explain-term" style="white-space: nowrap;">🔍 Phân tích</button>
+            </div>
+
+            <div id="ai-explain-term-result" style="margin-top: 16px; display: none;"></div>
+          </div>
+        </div>
+
+        <!-- Right Column: Immersive Roleplay Chat -->
+        <div class="glass-card" style="display: flex; flex-direction: column; padding: 22px 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+            <h3 style="font-family: 'Outfit'; font-size: 1.3rem;">💬 3. Trò Chuyện Nhập Vai Thực Chiến</h3>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <select class="lang-select" id="ai-scenario-select" style="font-size: 0.84rem; padding: 6px 10px;">
+                <option value="casual_talk">☕ Giao tiếp thường nhật</option>
+                <option value="restaurant">🍽️ Gọi món tại nhà hàng</option>
+                <option value="airport">✈️ Làm thủ tục sân bay</option>
+                <option value="shopping">🛍️ Mua sắm &amp; Hỏi giá</option>
+                <option value="job_interview">💼 Phỏng vấn công việc</option>
+              </select>
+              <button type="button" class="btn btn-secondary" id="btn-reset-chat" style="padding: 6px 10px; font-size: 0.8rem;" title="Làm mới đoạn hội thoại">🔄 Mới</button>
+            </div>
+          </div>
+
+          <div class="scenario-mission-box" id="ai-scenario-mission">
+            🎯 <strong>Nhiệm vụ tình huống:</strong> Trò chuyện tự nhiên về sở thích, kế hoạch cuối tuần và thói quen hằng ngày.
+          </div>
+
+          <div class="sample-chips-row" id="ai-starter-chips" style="margin-bottom: 10px;">
+            <!-- Starter prompts per scenario & language -->
+          </div>
+
+          <div class="chat-window" style="flex: 1; min-height: 430px;">
+            <div class="chat-messages" id="chat-messages-container">
+              <div class="chat-msg assistant">
+                Xin chào! Tôi là Trợ lý AI PolyLearn. Hãy chọn câu gợi ý phía trên hoặc nhập tin nhắn để cùng luyện phản xạ nhé!
+              </div>
+            </div>
+
+            <div class="chat-input-bar">
+              <input type="text" class="chat-input" id="chat-user-input" placeholder="Nhập câu trả lời bằng ngôn ngữ đang học...">
+              <button class="btn btn-primary" id="btn-send-chat">Gửi &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5.5 PERSONAL PROFILE VIEW (TRANG CÁ NHÂN) -->
+    <section class="view-section" id="view-profile">
+      <!-- Guest Prompt (when not logged in) -->
+      <div id="profile-guest-box" class="glass-card" style="display: none; text-align: center; padding: 56px 24px;">
+        <div id="profile-guest-mascot" style="width: 110px; height: 110px; margin: 0 auto 16px;"></div>
+        <h2 style="font-family: 'Outfit'; font-size: 2rem; margin-bottom: 10px;">Tạo Trang Cá Nhân &amp; Linh Vật Của Riêng Bạn!</h2>
+        <p style="color: var(--text-secondary); max-width: 520px; margin: 0 auto 24px;">
+          Đăng nhập hoặc tạo tài khoản miễn phí để chọn nhân vật đại diện, nuôi dưỡng linh vật đồng hành, tích lũy điểm XP, lên cấp và mở khóa bộ sưu tập huy hiệu!
+        </p>
+        <button class="btn btn-primary" id="btn-profile-open-auth" style="padding: 13px 32px; font-size: 1.05rem;">🚀 Đăng nhập / Tạo tài khoản ngay</button>
+      </div>
+
+      <!-- Authenticated Profile Content -->
+      <div id="profile-content-box">
+        <!-- Hero Profile Banner -->
+        <div class="profile-banner-card">
+          <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+            <div class="profile-avatar-showcase">
+              <div id="profile-banner-avatar" style="width: 100%; height: 100%;"></div>
+              <span class="profile-level-pill" id="profile-banner-level">Lv.1</span>
+            </div>
+
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px;">
+                <h2 style="font-family: 'Outfit'; font-size: 2rem; margin: 0;" id="profile-banner-name">Học viên PolyLearn</h2>
+                <span class="card-tag" style="background: rgba(245, 158, 11, 0.16); color: var(--warning-text); border-color: rgba(245, 158, 11, 0.35); font-size: 0.82rem;" id="profile-banner-rank">🌱 Tân Binh Ngôn Ngữ</span>
+              </div>
+              <p style="color: var(--text-secondary); font-size: 0.98rem; margin-bottom: 8px; max-width: 540px;" id="profile-banner-bio">
+                "Mỗi ngày tiến bộ 1% cùng PolyLearn AI!"
+              </p>
+              <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.84rem; color: var(--text-muted);" id="profile-banner-meta">
+                <span>📧 user@polylearn.ai</span>
+                <span>📅 Tham gia: --/--/----</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="min-width: 270px; flex: 1; max-width: 360px; background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 16px 20px; box-shadow: var(--card-shadow);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <span style="font-size: 0.85rem; font-weight: 700; color: var(--accent-primary);">⚡ Kinh nghiệm cấp độ</span>
+              <span style="font-size: 0.85rem; font-weight: 800; color: var(--warning-text);" id="profile-xp-text">0 / 100 XP</span>
+            </div>
+            <div class="progress-bar-track" style="height: 10px; margin-bottom: 10px;">
+              <div class="progress-bar-fill" id="profile-xp-fill" style="width: 0%;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--text-secondary);">
+              <span id="profile-today-goal-text">🎯 Hôm nay: 0/50 XP</span>
+              <span id="profile-total-xp-badge" style="color: var(--success-text); font-weight: 700;">Tổng: 0 XP</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifetime Learning Stats -->
+        <div class="stats-grid">
+          <div class="glass-card stat-card">
+            <div class="stat-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">📚</div>
+            <div>
+              <div class="stat-value" id="prof-stat-words">0</div>
+              <div class="stat-label">Tổng từ đã học</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">👑</div>
+            <div>
+              <div class="stat-value" id="prof-stat-mastered">0</div>
+              <div class="stat-label">Từ vựng thành thạo</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8;">📖</div>
+            <div>
+              <div class="stat-value" id="prof-stat-lessons">0</div>
+              <div class="stat-label">Bài học hoàn thành</div>
+            </div>
+          </div>
+          <div class="glass-card stat-card">
+            <div class="stat-icon" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">📝</div>
+            <div>
+              <div class="stat-value" id="prof-stat-quizzes">0</div>
+              <div class="stat-label">Đề thi đã chinh phục</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Columns: Character Customizer & Profile Settings -->
+        <div class="profile-two-col">
+          <!-- Left: Avatar Shop & Companion Picker -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-family: 'Outfit'; font-size: 1.35rem; margin: 0 0 4px;">🛍️ Cửa Hàng Ảnh Đại Diện</h3>
+                <p style="color: var(--text-secondary); font-size: 0.88rem; margin: 0;">
+                  Dùng Kim Cương 💎 hoặc XP tích lũy để mở khóa ảnh đại diện yêu thích!
+                </p>
+              </div>
+              <div class="shop-gem-pill" id="shop-gem-pill" title="Số dư Kim Cương của bạn">
+                💎 <b id="shop-user-gems">0</b> <small>Kim cương</small>
+              </div>
+            </div>
+
+            <!-- Avatar Shop Filter Tabs & Upload Button -->
+            <div class="avatar-shop-toolbar">
+              <div class="filter-tabs" id="avatar-shop-tabs" style="margin-bottom: 0;">
+                <button type="button" class="btn btn-secondary active avatar-shop-tab" data-filter="all">Tất cả</button>
+                <button type="button" class="btn btn-secondary avatar-shop-tab" data-filter="owned">Đã sở hữu</button>
+                <button type="button" class="btn btn-secondary avatar-shop-tab" data-filter="shop">🛍️ Cửa hàng</button>
+              </div>
+              <div>
+                <label for="input-custom-avatar-file" class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;" title="Tải ảnh cá nhân từ máy tính hoặc điện thoại">
+                  📷 <span>Tải ảnh lên</span>
+                </label>
+                <input type="file" id="input-custom-avatar-file" accept="image/*" style="display: none;">
+              </div>
+            </div>
+
+            <div class="avatar-picker-grid avatar-shop-grid" id="profile-avatar-picker">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div style="font-weight: 700; font-size: 0.9rem; color: #db2777; margin-top: 24px; margin-bottom: 8px;">2. Linh vật đồng hành khi học</div>
+            <div class="companion-picker-grid" id="profile-companion-picker">
+              <!-- Rendered via JS -->
+            </div>
+
+            <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+              <button type="button" class="btn btn-primary" id="btn-save-character">✨ Áp dụng Nhân vật &amp; Linh vật</button>
+            </div>
+          </div>
+
+          <!-- Right: Profile Bio, Goal & Password -->
+          <div class="glass-card">
+            <h3 style="font-family: 'Outfit'; font-size: 1.35rem; margin-bottom: 14px;">✏️ Thông Tin Cá Nhân &amp; Mục Tiêu</h3>
+            <form id="profile-form">
+              <div class="form-group">
+                <label class="form-label">Tên hiển thị</label>
+                <input type="text" class="form-input" id="profile-input-name" required maxlength="100" placeholder="Nhập biệt danh hoặc họ tên...">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Châm ngôn / Mục tiêu bản thân (Bio)</label>
+                <textarea class="form-input" id="profile-input-bio" rows="2" maxlength="300" placeholder="Ví dụ: Quyết tâm chinh phục JLPT N3 &amp; IELTS 7.5 năm nay!"></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Ngôn ngữ ưu tiên chính</label>
+                <select class="form-input" id="profile-input-lang">
+                  <option value="1">🇬🇧 Tiếng Anh (English)</option>
+                  <option value="2">🇨🇳 Tiếng Trung (中文)</option>
+                  <option value="3">🇯🇵 Tiếng Nhật (日本語)</option>
+                  <option value="4">🇰🇷 Tiếng Hàn (한국어)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Mục tiêu điểm XP mỗi ngày</label>
+                <div class="goal-preset-group" id="profile-goal-presets">
+                  <button type="button" class="goal-preset-btn" data-goal="30">🌱 Nhẹ nhàng (30 XP)</button>
+                  <button type="button" class="goal-preset-btn active" data-goal="50">⚡ Đều đặn (50 XP)</button>
+                  <button type="button" class="goal-preset-btn" data-goal="100">🔥 Chăm chỉ (100 XP)</button>
+                  <button type="button" class="goal-preset-btn" data-goal="200">👑 Siêu tốc (200 XP)</button>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" id="btn-save-profile" style="width: 100%; margin-top: 6px;">💾 Lưu hồ sơ cá nhân</button>
+            </form>
+
+            <hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 24px 0 18px;">
+
+            <h4 style="font-family: 'Outfit'; font-size: 1.1rem; margin-bottom: 12px;">🔒 Đổi Mật Khẩu</h4>
+            <form id="profile-password-form">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <input type="password" class="form-input" id="profile-cur-pwd" required placeholder="Mật khẩu hiện tại">
+                </div>
+                <div class="form-group" style="margin-bottom: 12px;">
+                  <input type="password" class="form-input" id="profile-new-pwd" required minlength="6" placeholder="Mật khẩu mới (>= 6 ký tự)">
+                </div>
+              </div>
+              <button type="submit" class="btn btn-secondary" id="btn-change-pwd" style="width: 100%;">🔑 Cập nhật mật khẩu</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- 14-Day Streak Calendar -->
+        <div class="glass-card" style="margin-bottom: 26px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="font-family: 'Outfit'; font-size: 1.3rem; margin-bottom: 4px;">🔥 Nhật Ký Chuỗi Ngày Học (14 Ngày Qua)</h3>
+              <p style="color: var(--text-secondary); font-size: 0.88rem;">Hoàn thành bài học hoặc làm đề Kiểm tra (Trắc nghiệm &amp; Tự luận) mỗi ngày để thắp sáng ngọn lửa Streak!</p>
+            </div>
+            <div class="streak-badge" id="profile-streak-badge">
+              🔥 <span id="profile-streak-count">0</span> ngày liên tục
+            </div>
+          </div>
+          <div class="streak-calendar-strip" id="profile-streak-strip">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Achievement Badges -->
+        <div class="glass-card" style="margin-bottom: 26px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div>
+              <h3 style="font-family: 'Outfit'; font-size: 1.3rem; margin-bottom: 4px;">🏅 Bộ Sưu Tập Huy Hiệu Thành Tích</h3>
+              <p style="color: var(--text-secondary); font-size: 0.88rem;">Chinh phục các cột mốc học tập để mở khóa toàn bộ huy hiệu danh giá.</p>
+            </div>
+            <span class="card-tag" id="profile-badges-summary" style="background: rgba(16, 185, 129, 0.15); color: var(--success-text);">Đã mở khóa 0/8</span>
+          </div>
+          <div class="badges-grid" id="profile-badges-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Recent Quiz History -->
+        <div class="glass-card">
+          <h3 style="font-family: 'Outfit'; font-size: 1.3rem; margin-bottom: 14px;">📝 Lịch Sử Kiểm Tra (Trắc Nghiệm &amp; Tự Luận)</h3>
+          <div id="profile-quiz-history">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ADMIN PORTAL VIEW -->
+    <section class="view-section" id="view-admin">
+      <div class="dashboard-hero" style="margin-bottom: 24px;">
+        <div>
+          <h2 style="font-family: 'Outfit'; font-size: 2.2rem; margin-bottom: 8px;">⚙️ Trung Tâm Quản Trị Hệ Thống</h2>
+          <p style="color: var(--text-secondary);">Quản lý cơ sở dữ liệu Từ vựng, Bài học, Ngân hàng câu hỏi trắc nghiệm và Phân quyền người dùng.</p>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <span class="card-tag" style="background: rgba(236, 72, 153, 0.15); color: #db2777; font-size: 0.9rem; padding: 8px 16px;">
+            👑 Quyền Quản trị viên
+          </span>
+        </div>
+      </div>
+
+      <!-- Admin Sub Tabs -->
+      <div style="display: flex; gap: 10px; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px; overflow-x: auto;">
+        <button class="btn btn-secondary active admin-subtab-btn" data-panel="words" id="btn-admin-tab-words">📚 Từ vựng</button>
+        <button class="btn btn-secondary admin-subtab-btn" data-panel="lessons" id="btn-admin-tab-lessons">📖 Bài học</button>
+        <button class="btn btn-secondary admin-subtab-btn" data-panel="questions" id="btn-admin-tab-questions">📝 Câu hỏi trắc nghiệm</button>
+        <button class="btn btn-secondary admin-subtab-btn" data-panel="users" id="btn-admin-tab-users">👥 Quản lý người dùng</button>
+      </div>
+
+      <!-- Panel 1: Words -->
+      <div class="admin-panel active" id="admin-panel-words">
+        <div class="admin-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <select class="lang-select" id="admin-words-lang-select">
+              <option value="1">🇬🇧 Tiếng Anh</option>
+              <option value="2">🇨🇳 Tiếng Trung</option>
+              <option value="3">🇯🇵 Tiếng Nhật</option>
+              <option value="4">🇰🇷 Tiếng Hàn</option>
+            </select>
+            <input type="text" class="form-input" id="admin-words-search" placeholder="Tìm theo từ, nghĩa..." style="width: 240px;">
+          </div>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-primary" id="btn-admin-open-presets" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); border: none; box-shadow: 0 4px 14px rgba(6, 182, 212, 0.35);">🌐 Nạp từ vựng ngoài (Oxford/HSK/JLPT/TOPIK)</button>
+            <button class="btn btn-secondary" id="btn-admin-export-words-csv">📤 Xuất CSV</button>
+            <button class="btn btn-secondary" id="btn-admin-import-words-csv">📥 Nhập CSV</button>
+            <button class="btn btn-primary" id="btn-admin-add-word">➕ Thêm từ vựng</button>
+          </div>
+        </div>
+
+        <div class="glass-card" style="padding: 0; overflow-x: auto; margin-top: 16px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Từ / Thuật ngữ</th>
+                <th>Phiên âm</th>
+                <th>Nghĩa tiếng Việt</th>
+                <th>Từ loại</th>
+                <th>Cấp độ</th>
+                <th style="text-align: right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-words-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel 2: Lessons -->
+      <div class="admin-panel" id="admin-panel-lessons" style="display: none;">
+        <div class="admin-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <select class="lang-select" id="admin-lessons-lang-select">
+              <option value="1">🇬🇧 Tiếng Anh</option>
+              <option value="2">🇨🇳 Tiếng Trung</option>
+              <option value="3">🇯🇵 Tiếng Nhật</option>
+              <option value="4">🇰🇷 Tiếng Hàn</option>
+            </select>
+            <input type="text" class="form-input" id="admin-lessons-search" placeholder="Tìm bài học..." style="width: 240px;">
+          </div>
+          <button class="btn btn-primary" id="btn-admin-add-lesson">➕ Thêm bài học mới</button>
+        </div>
+
+        <div class="glass-card" style="padding: 0; overflow-x: auto; margin-top: 16px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Tiêu đề bài học</th>
+                <th>Loại bài</th>
+                <th>Cấp độ</th>
+                <th>Thứ tự</th>
+                <th>Trạng thái</th>
+                <th style="text-align: right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-lessons-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel 3: Questions -->
+      <div class="admin-panel" id="admin-panel-questions" style="display: none;">
+        <div class="admin-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <select class="lang-select" id="admin-questions-lang-select">
+              <option value="1">🇬🇧 Tiếng Anh</option>
+              <option value="2">🇨🇳 Tiếng Trung</option>
+              <option value="3">🇯🇵 Tiếng Nhật</option>
+              <option value="4">🇰🇷 Tiếng Hàn</option>
+            </select>
+            <input type="text" class="form-input" id="admin-questions-search" placeholder="Tìm kiếm câu hỏi..." style="width: 240px;">
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-secondary" id="btn-admin-export-questions-csv">📤 Xuất CSV Đề thi</button>
+            <button class="btn btn-primary" id="btn-admin-add-question">➕ Thêm câu hỏi</button>
+          </div>
+        </div>
+
+        <div class="glass-card" style="padding: 0; overflow-x: auto; margin-top: 16px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 45%;">Nội dung câu hỏi</th>
+                <th>Số đáp án</th>
+                <th>Đáp án đúng</th>
+                <th>Giải thích</th>
+                <th style="text-align: right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-questions-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel 4: Users -->
+      <div class="admin-panel" id="admin-panel-users" style="display: none;">
+        <div class="admin-toolbar" style="display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap;">
+          <input type="text" class="form-input" id="admin-users-search" placeholder="Tìm theo email hoặc tên người dùng..." style="width: 320px;">
+          <button class="btn btn-secondary" id="btn-admin-refresh-users">🔄 Tải lại danh sách</button>
+        </div>
+
+        <div class="glass-card" style="padding: 0; overflow-x: auto; margin-top: 16px;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Tên hiển thị</th>
+                <th>Email</th>
+                <th>Vai trò (Role)</th>
+                <th>Trạng thái</th>
+                <th>Ngày tạo</th>
+                <th style="text-align: right;">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="admin-users-tbody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span class="logo-badge" style="font-size: 0.78rem; padding: 4px 10px;">PolyLearn AI</span>
+        <span style="color: var(--text-secondary); font-size: 0.85rem;">Nền tảng học Đa Ngôn Ngữ thông minh với Kiểm tra Trắc nghiệm &amp; Tự luận AI, Kho Từ Vĩnh Viễn và Trợ lý AI.</span>
+      </div>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted);">
+        <span>🇬🇧 CEFR A1–C2</span>
+        <span>•</span>
+        <span>🇨🇳 HSK 1–6</span>
+        <span>•</span>
+        <span>🇯🇵 JLPT N5–N1</span>
+        <span>•</span>
+        <span>🇰🇷 TOPIK I–II</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Login/Register Modal -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Outfit'; font-size: 1.6rem;" id="auth-modal-title">Đăng Nhập</h2>
+        <button id="btn-close-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+        <button class="btn btn-secondary active" id="tab-login" style="flex: 1;">Đăng nhập</button>
+        <button class="btn btn-secondary" id="tab-register" style="flex: 1;">Đăng ký</button>
+      </div>
+
+      <form id="auth-form">
+        <div class="form-group" id="group-displayname" style="display: none;">
+          <label class="form-label">Tên hiển thị</label>
+          <input type="text" class="form-input" id="auth-displayname" placeholder="Nguyễn Văn A">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" id="auth-email" placeholder="name@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mật khẩu</label>
+          <input type="password" class="form-input" id="auth-password" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="btn-submit-auth" style="width: 100%; margin-top: 10px;">Đăng nhập</button>
+      </form>
+
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-subtle); text-align: center;">
+        <button class="btn btn-secondary" id="btn-quick-admin" style="font-size: 0.85rem; width: 100%;">
+          ⚡ Đăng nhập nhanh Admin (admin@polylearn.ai)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lesson Study Modal -->
+  <div class="modal-overlay" id="lesson-study-modal">
+    <div class="modal-box modal-box-large">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span class="card-tag" id="study-lesson-type-badge">Luyện nghe</span>
+            <span class="card-tag" style="background: var(--accent-soft); color: var(--accent-primary);" id="study-lesson-level-badge">A1</span>
+            <span class="card-tag" id="study-lesson-status-badge" style="background: rgba(16, 185, 129, 0.16); color: var(--success-text); display: none;">✓ Đã hoàn thành</span>
+          </div>
+          <h2 style="font-family: 'Outfit'; font-size: 1.8rem;" id="study-lesson-title">Tiêu đề bài học</h2>
+        </div>
+        <button id="btn-close-lesson-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.8rem; cursor: pointer; padding: 4px 8px; line-height: 1;">&times;</button>
+      </div>
+
+      <!-- Content Area -->
+      <div class="lesson-study-body">
+        <!-- Audio / TTS Bar (if content exists) -->
+        <div id="study-audio-bar" class="audio-player-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; padding: 12px 18px; background: var(--accent-soft); border: 1px solid var(--border-highlight); border-radius: var(--radius-md);">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="speaker-btn" id="btn-study-speak" title="Nghe đọc bài học" style="width: 44px; height: 44px; font-size: 1.25rem;">🔊</button>
+            <div>
+              <div style="font-weight: 700; font-size: 0.95rem;">Luyện phát âm & Nghe bản xứ</div>
+              <div style="font-size: 0.8rem; color: var(--text-secondary);">Nhấp vào loa để nghe đọc toàn bài hoặc từng câu</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-secondary" id="btn-study-ai-explain" style="padding: 7px 14px; font-size: 0.85rem;">✨ AI Giải thích</button>
+          </div>
+        </div>
+
+        <!-- AI Explanation Card (expandable) -->
+        <div id="study-ai-explanation-box" style="display: none; margin-bottom: 20px; background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); border-radius: var(--radius-md); padding: 16px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-weight: 700; color: var(--reading-color); font-size: 0.95rem;">🤖 Trợ lý AI phân tích ngữ pháp & từ vựng:</div>
+            <button id="btn-close-ai-explain" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem;">&times;</button>
+          </div>
+          <div id="study-ai-explanation-content" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">Đang phân tích...</div>
+        </div>
+
+        <!-- Lesson Main Text / Reader -->
+        <div class="lesson-reader-box" id="study-lesson-content">
+          <!-- Text sentences rendered here with clickable speak icon -->
+        </div>
+
+        <!-- Practice Questions inside Lesson -->
+        <div id="study-questions-section" style="margin-top: 28px; display: none;">
+          <h3 style="font-family: 'Outfit'; font-size: 1.3rem; margin-bottom: 14px; color: var(--accent-primary);">📝 Bài tập củng cố</h3>
+          <div id="study-questions-list">
+            <!-- Questions rendered here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Actions -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px; border-top: 1px solid var(--border-subtle); padding-top: 18px;">
+        <button class="btn btn-secondary" id="btn-study-back">⬅️ Quay lại</button>
+        <button class="btn btn-success" id="btn-study-complete">✅ Đánh dấu hoàn thành bài học</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Word Modal -->
+  <div class="modal-overlay" id="admin-word-modal">
+    <div class="modal-box modal-box-large">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Outfit'; font-size: 1.6rem;" id="admin-word-modal-title">Thêm Từ Vựng Mới</h2>
+        <button id="btn-close-word-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="admin-word-form" style="overflow-y: auto; max-height: calc(85vh - 120px); padding-right: 8px;">
+        <input type="hidden" id="admin-word-id">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Ngôn ngữ</label>
+            <select class="form-input" id="admin-word-lang-select" required>
+              <option value="1">Tiếng Anh</option>
+              <option value="2">Tiếng Trung</option>
+              <option value="3">Tiếng Nhật</option>
+              <option value="4">Tiếng Hàn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cấp độ (Level)</label>
+            <select class="form-input" id="admin-word-level-select" required></select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <label class="form-label" style="margin-bottom: 0;">Từ / Thuật ngữ</label>
+              <button type="button" id="btn-admin-lookup-external" class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.75rem; border-color: var(--meaning-color); color: var(--meaning-color);">🔍 Tra từ ngoài</button>
+            </div>
+            <input type="text" class="form-input" id="admin-word-term" placeholder="VD: Hello, 你好..." required style="margin-top: 6px;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phiên âm (IPA / Pinyin / Romaji)</label>
+            <input type="text" class="form-input" id="admin-word-reading" placeholder="VD: /həˈloʊ/, nǐ hǎo...">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Nghĩa tiếng Việt</label>
+            <input type="text" class="form-input" id="admin-word-meaning" placeholder="VD: xin chào" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Từ loại</label>
+            <input type="text" class="form-input" id="admin-word-pos" placeholder="noun, verb...">
+          </div>
+        </div>
+
+        <div style="border-top: 1px solid var(--border-subtle); margin-top: 10px; padding-top: 16px;">
+          <h4 style="font-size: 1rem; color: var(--accent-primary); margin-bottom: 12px;">Câu ví dụ minh họa</h4>
+          <div class="form-group">
+            <label class="form-label">Câu ví dụ</label>
+            <input type="text" class="form-input" id="admin-word-ex-sentence" placeholder="VD: Hello, how are you?">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dịch câu ví dụ</label>
+            <input type="text" class="form-input" id="admin-word-ex-trans" placeholder="VD: Xin chào, bạn khỏe không?">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-word-modal">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-word">Lưu từ vựng</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Lesson Modal -->
+  <div class="modal-overlay" id="admin-lesson-modal">
+    <div class="modal-box modal-box-large">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Outfit'; font-size: 1.6rem;" id="admin-lesson-modal-title">Thêm Bài Học Mới</h2>
+        <button id="btn-close-lesson-admin-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="admin-lesson-form" style="overflow-y: auto; max-height: calc(85vh - 120px); padding-right: 8px;">
+        <input type="hidden" id="admin-lesson-id">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label">Ngôn ngữ</label>
+            <select class="form-input" id="admin-lesson-lang-select" required>
+              <option value="1">Tiếng Anh</option>
+              <option value="2">Tiếng Trung</option>
+              <option value="3">Tiếng Nhật</option>
+              <option value="4">Tiếng Hàn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cấp độ</label>
+            <select class="form-input" id="admin-lesson-level-select" required></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Dạng bài</label>
+            <select class="form-input" id="admin-lesson-type-select" required>
+              <option value="0">Từ vựng (Vocabulary)</option>
+              <option value="1">Luyện nghe (Listening)</option>
+              <option value="2">Đọc hiểu (Reading)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tiêu đề bài học</label>
+          <input type="text" class="form-input" id="admin-lesson-title" placeholder="VD: Luyện nghe: Mua sắm tại siêu thị" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nội dung bài học / Văn bản bài đọc</label>
+          <textarea class="form-input" id="admin-lesson-content" rows="6" placeholder="Nhập nội dung bài đọc hoặc hội thoại..." style="resize: vertical;"></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Thứ tự sắp xếp (Sort Order)</label>
+            <input type="number" class="form-input" id="admin-lesson-sort" value="1" min="1" required>
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-top: 26px;">
+            <input type="checkbox" id="admin-lesson-published" checked style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="admin-lesson-published" style="cursor: pointer; font-size: 0.95rem;">Xuất bản công khai (Published)</label>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-lesson-admin-modal">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-lesson">Lưu bài học</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Question Modal -->
+  <div class="modal-overlay" id="admin-question-modal">
+    <div class="modal-box modal-box-large">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Outfit'; font-size: 1.6rem;" id="admin-question-modal-title">Thêm Câu Hỏi Trắc Nghiệm</h2>
+        <button id="btn-close-question-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+      <form id="admin-question-form" style="overflow-y: auto; max-height: calc(85vh - 120px); padding-right: 8px;">
+        <input type="hidden" id="admin-question-id">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label">Ngôn ngữ</label>
+            <select class="form-input" id="admin-question-lang-select" required>
+              <option value="1">Tiếng Anh</option>
+              <option value="2">Tiếng Trung</option>
+              <option value="3">Tiếng Nhật</option>
+              <option value="4">Tiếng Hàn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cấp độ</label>
+            <select class="form-input" id="admin-question-level-select" required></select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nội dung câu hỏi</label>
+          <input type="text" class="form-input" id="admin-question-text" placeholder="VD: Nghĩa của từ 'Airport' là gì?" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Giải thích đáp án</label>
+          <input type="text" class="form-input" id="admin-question-explanation" placeholder="VD: 'Airport' nghĩa là sân bay.">
+        </div>
+
+        <div style="margin-top: 14px;">
+          <label class="form-label">4 Đáp án lựa chọn (Chọn nút tròn để chỉ định đáp án ĐÚNG):</label>
+          
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+            <input type="radio" name="admin-correct-opt" value="0" checked style="width: 20px; height: 20px; cursor: pointer;">
+            <input type="text" class="form-input opt-text-input" placeholder="Đáp án A (chính xác)" required>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+            <input type="radio" name="admin-correct-opt" value="1" style="width: 20px; height: 20px; cursor: pointer;">
+            <input type="text" class="form-input opt-text-input" placeholder="Đáp án B" required>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+            <input type="radio" name="admin-correct-opt" value="2" style="width: 20px; height: 20px; cursor: pointer;">
+            <input type="text" class="form-input opt-text-input" placeholder="Đáp án C" required>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+            <input type="radio" name="admin-correct-opt" value="3" style="width: 20px; height: 20px; cursor: pointer;">
+            <input type="text" class="form-input opt-text-input" placeholder="Đáp án D" required>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-question-modal">Hủy bỏ</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-question">Lưu câu hỏi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin International Presets Modal -->
+  <div class="modal-overlay" id="admin-presets-modal">
+    <div class="modal-box modal-box-large" style="max-width: 840px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div>
+          <h2 style="font-family: 'Outfit'; font-size: 1.6rem; color: var(--meaning-color);">🌐 Nạp Từ Vựng Chuẩn Quốc Tế</h2>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;">Nạp trực tiếp bộ từ vựng tiêu chuẩn từ bên ngoài (Oxford, HSK, JLPT, TOPIK) kèm phiên âm, từ loại, ví dụ song ngữ và câu hỏi trắc nghiệm tự động.</p>
+        </div>
+        <button id="btn-close-presets-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <button class="btn btn-primary" id="btn-import-all-presets" style="background: linear-gradient(135deg, #ec4899, #8b5cf6); border: none; font-weight: 600;">
+          ⚡ Nạp TẤT CẢ 4 Bộ Chuẩn Quốc Tế (100 Từ + 100 Trắc Nghiệm)
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;" id="presets-grid-container">
+        <!-- Dataset Card 1: Oxford -->
+        <div class="glass-card" style="padding: 16px; border: 1px solid rgba(56, 189, 248, 0.35); background: var(--bg-surface-elevated);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <span style="font-size: 1.4rem;">🇬🇧</span>
+              <strong style="font-size: 1.05rem; margin-left: 8px; color: var(--text-primary);">Oxford 3000 (CEFR A1-A2)</strong>
+            </div>
+            <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--meaning-color); font-size: 0.75rem;">25 từ chuẩn</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">
+            Bộ từ vựng cốt lõi tiếng Anh đại học Oxford kèm phiên âm IPA chuẩn quốc tế và câu ví dụ ứng dụng đời sống.
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Level: A1 & A2 (Tiếng Anh)</span>
+            <button class="btn btn-secondary btn-import-preset-single" data-key="oxford" style="padding: 6px 14px; font-size: 0.8rem; border-color: #0284c7; color: var(--meaning-color);">📥 Nạp bộ này</button>
+          </div>
+        </div>
+
+        <!-- Dataset Card 2: HSK -->
+        <div class="glass-card" style="padding: 16px; border: 1px solid rgba(239, 68, 68, 0.3); background: var(--bg-surface-elevated);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <span style="font-size: 1.4rem;">🇨🇳</span>
+              <strong style="font-size: 1.05rem; margin-left: 8px; color: var(--text-primary);">HSK 1 & HSK 2</strong>
+            </div>
+            <span class="badge" style="background: rgba(239, 68, 68, 0.14); color: var(--danger); font-size: 0.75rem;">25 từ chuẩn</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">
+            Bộ chuẩn Hán ngữ quốc tế Hanban, đầy đủ chữ Hán giản thể, phiên âm Pinyin thanh điệu và nghĩa tiếng Việt.
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Level: HSK 1 & HSK 2 (Tiếng Trung)</span>
+            <button class="btn btn-secondary btn-import-preset-single" data-key="hsk" style="padding: 6px 14px; font-size: 0.8rem; border-color: var(--danger); color: var(--danger);">📥 Nạp bộ này</button>
+          </div>
+        </div>
+
+        <!-- Dataset Card 3: JLPT -->
+        <div class="glass-card" style="padding: 16px; border: 1px solid rgba(168, 85, 247, 0.3); background: var(--bg-surface-elevated);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <span style="font-size: 1.4rem;">🇯🇵</span>
+              <strong style="font-size: 1.05rem; margin-left: 8px; color: var(--text-primary);">JLPT N5 & JLPT N4</strong>
+            </div>
+            <span class="badge" style="background: rgba(168, 85, 247, 0.14); color: var(--reading-color); font-size: 0.75rem;">25 từ chuẩn</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">
+            Kỳ thi năng lực Nhật ngữ quốc tế JLPT, kèm cách đọc Furigana / Hiragana và câu đàm thoại chuẩn giao tiếp.
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Level: N5 & N4 (Tiếng Nhật)</span>
+            <button class="btn btn-secondary btn-import-preset-single" data-key="jlpt" style="padding: 6px 14px; font-size: 0.8rem; border-color: var(--reading-color); color: var(--reading-color);">📥 Nạp bộ này</button>
+          </div>
+        </div>
+
+        <!-- Dataset Card 4: TOPIK -->
+        <div class="glass-card" style="padding: 16px; border: 1px solid rgba(16, 185, 129, 0.3); background: var(--bg-surface-elevated);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <div>
+              <span style="font-size: 1.4rem;">🇰🇷</span>
+              <strong style="font-size: 1.05rem; margin-left: 8px; color: var(--text-primary);">TOPIK I (Cấp 1 & 2)</strong>
+            </div>
+            <span class="badge" style="background: rgba(16, 185, 129, 0.14); color: var(--success-text); font-size: 0.75rem;">25 từ chuẩn</span>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">
+            Kỳ thi chuẩn năng lực tiếng Hàn NIIED Hàn Quốc, kèm phát âm Romaja chuẩn và ví dụ ngữ cảnh sinh hoạt.
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Level: TOPIK 1 & TOPIK 2 (Tiếng Hàn)</span>
+            <button class="btn btn-secondary btn-import-preset-single" data-key="topik" style="padding: 6px 14px; font-size: 0.8rem; border-color: var(--success-text); color: var(--success-text);">📥 Nạp bộ này</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" id="btn-cancel-presets">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin CSV Import Modal -->
+  <div class="modal-overlay" id="admin-csv-modal">
+    <div class="modal-box" style="max-width: 580px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="font-family: 'Outfit'; font-size: 1.6rem;">📥 Nhập Từ Vựng Từ File CSV</h2>
+        <button id="btn-close-csv-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+      <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 16px;">
+        Chọn file CSV có cấu trúc các cột: <code>Term, Reading, Meaning, PartOfSpeech, Example, Translation</code>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Chọn tệp CSV</label>
+        <input type="file" id="admin-csv-file-input" accept=".csv,text/csv" class="form-input" style="padding: 8px;">
+      </div>
+      <div id="admin-csv-preview-area" style="display: none; max-height: 180px; overflow-y: auto; background: var(--bg-primary); border-radius: 8px; padding: 12px; font-size: 0.85rem; margin-bottom: 16px; border: 1px solid var(--border-subtle);"></div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 12px;">
+        <button class="btn btn-secondary" id="btn-cancel-csv">Hủy</button>
+        <button class="btn btn-primary" id="btn-submit-csv-import" disabled>Bắt đầu nhập dữ liệu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Mini Custom Exam Trigger (Square button bottom-left matching screenshot) -->
+  <button type="button" class="floating-custom-exam-btn" id="btn-floating-custom-exam" title="Tùy chỉnh đề thi riêng (Số câu, Tự luận, Harvest...)">
+    <span>🪪</span>
+  </button>
+
+  <!-- Floating App Navigation Dock (Matching user screenshot) -->
+  <div class="app-bottom-dock-wrap" id="app-bottom-dock-wrap">
+    <nav class="app-bottom-dock">
+      <button type="button" class="dock-btn nav-btn" id="nav-btn-dashboard" data-view="dashboard">
+        <span class="dock-icon">🏠</span>
+        <span class="dock-label">Trang chủ</span>
+      </button>
+      <button type="button" class="dock-btn nav-btn" id="nav-btn-lessons" data-view="lessons">
+        <span class="dock-icon">🗺️</span>
+        <span class="dock-label">Lộ trình &amp; Từ</span>
+      </button>
+      <button type="button" class="dock-btn nav-btn active" id="nav-btn-quizzes" data-view="quizzes">
+        <span class="dock-icon">🎯</span>
+        <span class="dock-label">Kiểm tra</span>
+      </button>
+      <button type="button" class="dock-btn nav-btn" id="nav-btn-ai" data-view="ai">
+        <span class="dock-icon">🤖</span>
+        <span class="dock-label">AI Lab</span>
+      </button>
+      <button type="button" class="dock-btn nav-btn" id="nav-btn-profile" data-view="profile">
+        <span class="dock-icon">🎒</span>
+        <span class="dock-label">Hồ sơ</span>
+      </button>
+    </nav>
+    <button type="button" class="dock-btn nav-btn app-dict-fab" id="nav-btn-words" data-view="mistakes" title="Sổ tay câu hỏi &amp; từ vựng đã làm sai">
+      <span class="dock-icon">⚠️</span>
+      <span class="dock-label">Đã sai (<span id="dock-mistakes-badge">0</span>)</span>
+    </button>
+  </div>
+
+  <!-- Exam History Quick Modal (Triggered by Top-Left Clock 🕒 button) -->
+  <div class="modal-overlay" id="exam-history-modal">
+    <div class="modal-box" style="max-width: 620px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5rem;">🕒</span>
+          <h2 style="font-family: 'Outfit'; font-size: 1.5rem; margin: 0;">Lịch Sử Các Bài Thi Đã Làm</h2>
+        </div>
+        <button id="btn-close-exam-history-modal" style="background: none; border: none; color: var(--text-muted); font-size: 1.6rem; cursor: pointer;">&times;</button>
+      </div>
+      <div id="exam-history-modal-list" class="modal-history-list" style="max-height: 380px; overflow-y: auto;">
+        <!-- Rendered via JS -->
+      </div>
+      <div style="margin-top: 18px; display: flex; justify-content: flex-end;">
+        <button class="btn btn-secondary" id="btn-cancel-exam-history">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="js/gamification.js?v=20261112_1"></script>
+  <script src="js/api.js?v=20261112_1"></script>
+  <script src="js/app.js?v=20261112_1"></script>
+</body>
+</html>
