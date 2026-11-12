@@ -5086,26 +5086,60 @@ body[data-theme="dark"] .matching-tile {
     font-size: 0.84rem !important;
   }
 
-  /* Compact Topbar for Mobile */
-  .app-topbar-inner {
-    padding: 8px 12px !important;
+  .desktop-only {
+    display: none !important;
   }
 
-  .app-topbar-center {
-    display: none !important; /* Hide redundant center title on mobile to give space for stats */
+  .app-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .app-topbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px !important;
+    gap: 8px !important;
+  }
+
+  .app-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .app-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
   }
 
   .top-stats {
+    display: flex !important;
+    align-items: center !important;
     gap: 4px !important;
   }
 
   .top-stat {
     padding: 4px 8px !important;
     font-size: 0.78rem !important;
+    border-radius: 999px !important;
   }
 
-  .top-stat.heart, .top-stat.level {
-    display: none !important; /* Keep streak and gem visible to avoid clutter */
+  .app-topbar-auth .btn-primary {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+    border-radius: 999px !important;
+  }
+
+  .app-topbar-center {
+    display: none !important;
   }
 }
 
