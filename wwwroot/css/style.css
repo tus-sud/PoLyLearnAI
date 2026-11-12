@@ -4940,6 +4940,175 @@ body[data-theme="dark"] .matching-tile {
   }
 }
 
+  .app-bottom-dock-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 12px));
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border-subtle);
+    z-index: 1000;
+  }
+
+  body[data-theme="dark"] .app-bottom-dock-wrap {
+    background: rgba(15, 23, 42, 0.92);
+    border-top-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .app-bottom-dock {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+    gap: 2px;
+  }
+
+  .app-bottom-dock .dock-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 4px;
+    min-width: 52px;
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .app-bottom-dock .dock-btn.active {
+    color: var(--accent-primary);
+    background: var(--accent-soft);
+  }
+
+  .dock-btn .dock-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .dock-btn .dock-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
+  }
+
+  .app-dict-fab {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 6px;
+    min-width: 56px;
+    flex: 1;
+    background: rgba(239, 68, 68, 0.08) !important;
+    border: 1px solid rgba(239, 68, 68, 0.25) !important;
+    border-radius: 12px;
+    color: #dc2626 !important;
+  }
+
+  .app-dict-fab.active {
+    background: #ef4444 !important;
+    color: #fff !important;
+    border-color: #ef4444 !important;
+  }
+
+  /* Compact Horizontal Subtab Slider for Mobile */
+  .unified-roadmap-bar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    gap: 8px !important;
+    padding: 6px 8px !important;
+    margin-bottom: 12px !important;
+    border-radius: 14px !important;
+  }
+
+  .unified-roadmap-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .unified-subtab-btn {
+    flex: 0 0 auto !important;
+    padding: 8px 14px !important;
+    font-size: 0.82rem !important;
+    border-radius: 10px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Cleaner Stage Banner & Hero on Mobile */
+  .stage-hero-banner {
+    padding: 18px 16px !important;
+    border-radius: 20px !important;
+    margin-bottom: 18px !important;
+  }
+
+  .stage-hero-title {
+    font-size: 1.35rem !important;
+    margin: 4px 0 10px !important;
+  }
+
+  .page-title {
+    font-size: 1.45rem !important;
+  }
+
+  .page-sub {
+    font-size: 0.84rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .stage-carousel-container {
+    padding: 6px 8px !important;
+    margin-bottom: 14px !important;
+  }
+
+  .stage-pill {
+    padding: 6px 14px !important;
+    font-size: 0.82rem !important;
+  }
+
+  .chunky-btn, .chunky-btn-pink {
+    padding: 8px 16px !important;
+    font-size: 0.84rem !important;
+  }
+
+  /* Compact Topbar for Mobile */
+  .app-topbar-inner {
+    padding: 8px 12px !important;
+  }
+
+  .app-topbar-center {
+    display: none !important; /* Hide redundant center title on mobile to give space for stats */
+  }
+
+  .top-stats {
+    gap: 4px !important;
+  }
+
+  .top-stat {
+    padding: 4px 8px !important;
+    font-size: 0.78rem !important;
+  }
+
+  .top-stat.heart, .top-stat.level {
+    display: none !important; /* Keep streak and gem visible to avoid clutter */
+  }
+}
+
 /* Micro screens (< 480px) */
 @media (max-width: 480px) {
   #btn-toggle-sfx {
@@ -4961,22 +5130,21 @@ body[data-theme="dark"] .matching-tile {
   }
 
   .app-bottom-dock .dock-btn {
-    padding: 4px 3px !important;
-    min-width: 36px !important;
+    padding: 4px 2px !important;
+    min-width: 46px !important;
   }
 
   .dock-btn .dock-label {
-    font-size: 0.58rem !important;
+    font-size: 0.62rem !important;
   }
 
   .app-dict-fab {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
+    min-width: 48px !important;
+    padding: 4px 4px !important;
   }
 
   .app-dict-fab .dock-label {
-    font-size: 0.58rem !important;
+    font-size: 0.62rem !important;
   }
 }
 
